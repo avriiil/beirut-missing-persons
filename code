@@ -1,0 +1,239 @@
+import datetime
+import pprint
+from operator import itemgetter
+
+#missing_persons = [['Last Name', 'First Name', 'Date of Birth', 'Phone Number', 'Status', 'Missing Since', 'Found On']]
+
+
+print(datetime.datetime.now())
+now = datetime.datetime.now()
+time_stamp = str(now.day)+'/'+str(now.month)+'/'+str(now.year)+'  '+str(now.hour)+':'+str(now.minute)+':'+str(now.second)
+print(time_stamp)
+
+missing_persons_dict = {0:{}}
+
+def new_entry(first_name='', last_name=''):
+    if last_name=='':
+        last_name = input("Please enter the missing person's last name: ").capitalize()
+    if first_name=='':
+        first_name = input("Please enter the missing person's first name: ").capitalize()
+    dob = input("Please enter the missing person's DOB (DD/MM/YYYY): ")
+    phone_number = input("Please enter the missing person's phone number: ")
+    status = "Missing"
+    missing_since = str(now.day)+'/'+str(now.month)+'/'+str(now.year)+'  '+str(now.hour)+':'+str(now.minute)+':'+str(now.second)
+    found_on = "N/A"
+    mp_id = max(missing_persons_dict.keys()) + 1
+    missing_persons_dict[mp_id] = {'last_name':last_name, 
+                                    'first_name':first_name,
+                                    'dob':dob,
+                                    'phone_number':phone_number,
+                                    'status':status,
+                                    'missing_since':missing_since,
+                                    'found_on':found_on}
+    print(missing_persons_dict[mp_id])
+    return
+
+def update_entry_AC():
+    #user_query = input('Please provide the last name of the entry you want to update: ').capitalize()
+    last_name_query = input('Please provide the last name of the entry you want to update: ').capitalize()
+    first_name_query = input('Please provide the first name of the entry you want to update: ').capitalize()
+    results_dict={0:{}}
+    #CHECK FOR Missing Person
+    for k, v in missing_persons_dict:
+        if v['last_name']==last_name_query and v['first_name']==first_name_query:
+            results_dict[max(results_dict.keys())+1]=v
+    if max(results_dict.keys())==0:
+        print("We did not find", first_name_query, last_name_query, "in the database.")
+        user_input_3 = input('\nWould you like to enter', first_name_query, last_name_query,'into the Missing Persons List? (y/n) ').lower()
+        if user_input_3 =='y':
+            new_entry(first_name=first_name_query, last_name=last_name_query)
+    if max(results_dict.keys())==1:
+        print("We found", first_name_query, last_name_query, "in the database.")
+        for k, v in results_dict.items:
+            print(k, ":", v)
+    return
+
+
+        
+
+
+            
+    print('We have found the following entry to match the last name you provided: \n')
+    user_input_3 = input('\nIs this the entry you want to update? (y/n) ').lower()
+
+    user_input_4 = input("\nWhich of these elements would you like to update? Choose either 'Last Name', 'First Name', 'Date of Birth', 'Phone Number', or 'Status' [case-sensitive]: ")
+
+    for sublist in missing_persons:
+        if user_query == sublist[0]:
+            
+            print(sublist)
+            
+                
+            if user_input_3 == 'y':
+                correct_entry = True
+                valid_choice_element = False
+                while valid_choice_element == False:
+                    
+                    # use dictionary to index by key (create unique ID number)
+                    # missing_person_dict = {mp_id(int) :{'last_name':'', first_name:'', dob:datetime..., etc.}}
+                    if user_input_4 == missing_persons[0][0]: #Last Name
+                        valid_choice_element = True
+                        sublist[0] = input('What would you like to change the Last Name to? ')
+                        print('Thank you. The entry has been updated as follows: ')
+                        print(sublist)
+                    elif user_input_4 == missing_persons[0][1]: #First Name
+                        valid_choice_element = True
+                        sublist[1] = input('What would you like to change the First Name to? ')
+                        print('Thank you. The entry has been updated as follows: ')
+                        print(sublist)
+                    elif user_input_4 == missing_persons[0][2]: #DoB
+                        valid_choice_element = True
+                        sublist[2] = input('What would you like to change the DoB to? (DD/MM/YYYY) ')
+                        print('Thank you. The entry has been updated as follows: ')
+                        print(sublist)
+                    elif user_input_4 == missing_persons[0][3]: #Phone Number
+                        valid_choice_element = True
+                        sublist[3] = input('What would you like to change the Phone Number to? ')
+                        print('Thank you. The entry has been updated as follows: ')
+                        print(sublist)
+                    elif user_input_4 == missing_persons[0][4]: #Status
+                        valid_choice_element = True
+                        user_input_status = input("What would you like to change the status to? Choose either 'Missing', 'Found (deceased)' or 'Found (alive)' [case-sensitive]: ")
+                        status_choice = False
+                        while status_choice == False:
+                            if user_input_status == 'Missing':
+                                status_choice = True
+                                sublist[4] = 'Missing'
+                            elif user_input_status == 'Found (deceased)':
+                                status_choice = True 
+                                sublist[4] = 'Found (deceased)'
+                                sublist[6] = str(now.day)+'/'+str(now.month)+'/'+str(now.year)+'  '+str(now.hour)+':'+str(now.minute)+':'+str(now.second)
+                            elif user_input_status == 'Found (alive)':
+                                status_choice = True
+                                sublist[4] = 'Found (alive)'
+                                sublist[6] = str(now.day)+'/'+str(now.month)+'/'+str(now.year)+'  '+str(now.hour)+':'+str(now.minute)+':'+str(now.second)
+                            else:
+                                status_choice = False
+                                print('That entry is not valid. Please try again.')
+                        print('Thank you. The entry has been updated as follows: ')
+                        print(sublist)    
+                    else:
+                        valid_choice_element = False
+                        print('That entry is not valid. Please try again.')
+            else:
+                print("OK. Let's try again!")
+        else:
+                        continue
+
+    return
+
+def update_entry():
+    correct_entry = False
+    while correct_entry == False:
+        user_query = input('Please provide the last name of the entry you want to update: ').capitalize()
+        for sublist in missing_persons:
+            if user_query == sublist[0]:
+                print('We have found the following entry to match the last name you provided: \n')
+                print(sublist)
+                user_input_3 = input('\nIs this the entry you want to update? (y/n) ').lower()
+                    
+                if user_input_3 == 'y':
+                    correct_entry = True
+                    valid_choice_element = False
+                    while valid_choice_element == False:
+                        user_input_4 = input("\nWhich of these elements would you like to update? Choose either 'Last Name', 'First Name', 'Date of Birth', 'Phone Number', or 'Status' [case-sensitive]: ")
+                        # use dictionary to index by key (create unique ID number)
+                        # missing_person_dict = {mp_id(int) :{'last_name':'', first_name:'', dob:datetime..., etc.}}
+                        if user_input_4 == missing_persons[0][0]: #Last Name
+                            valid_choice_element = True
+                            sublist[0] = input('What would you like to change the Last Name to? ')
+                            print('Thank you. The entry has been updated as follows: ')
+                            print(sublist)
+                        elif user_input_4 == missing_persons[0][1]: #First Name
+                            valid_choice_element = True
+                            sublist[1] = input('What would you like to change the First Name to? ')
+                            print('Thank you. The entry has been updated as follows: ')
+                            print(sublist)
+                        elif user_input_4 == missing_persons[0][2]: #DoB
+                            valid_choice_element = True
+                            sublist[2] = input('What would you like to change the DoB to? (DD/MM/YYYY) ')
+                            print('Thank you. The entry has been updated as follows: ')
+                            print(sublist)
+                        elif user_input_4 == missing_persons[0][3]: #Phone Number
+                            valid_choice_element = True
+                            sublist[3] = input('What would you like to change the Phone Number to? ')
+                            print('Thank you. The entry has been updated as follows: ')
+                            print(sublist)
+                        elif user_input_4 == missing_persons[0][4]: #Status
+                            valid_choice_element = True
+                            user_input_status = input("What would you like to change the status to? Choose either 'Missing', 'Found (deceased)' or 'Found (alive)' [case-sensitive]: ")
+                            status_choice = False
+                            while status_choice == False:
+                                if user_input_status == 'Missing':
+                                    status_choice = True
+                                    sublist[4] = 'Missing'
+                                elif user_input_status == 'Found (deceased)':
+                                    status_choice = True 
+                                    sublist[4] = 'Found (deceased)'
+                                    sublist[6] = str(now.day)+'/'+str(now.month)+'/'+str(now.year)+'  '+str(now.hour)+':'+str(now.minute)+':'+str(now.second)
+                                elif user_input_status == 'Found (alive)':
+                                    status_choice = True
+                                    sublist[4] = 'Found (alive)'
+                                    sublist[6] = str(now.day)+'/'+str(now.month)+'/'+str(now.year)+'  '+str(now.hour)+':'+str(now.minute)+':'+str(now.second)
+                                else:
+                                    status_choice = False
+                                    print('That entry is not valid. Please try again.')
+                            print('Thank you. The entry has been updated as follows: ')
+                            print(sublist)    
+                        else:
+                            valid_choice_element = False
+                            print('That entry is not valid. Please try again.')
+                else:
+                    print("OK. Let's try again!")
+            else:
+                            continue
+
+def report_missing():
+    now = datetime.datetime.now()
+    time_stamp_first_report = str(now.day)+'/'+str(now.month)+'/'+str(now.year)+'  '+str(now.hour)+':'+str(now.minute)+':'+str(now.second)
+    print('\n*** REPORT OF MISSING PEOPLE IN BEIRUT SINCE EXPLOSION ON TUESDAY AUGUST 4 2020 ***\n')
+    user_input_1 = input('Do you want to make changes to the record? (y/n) ').lower()
+    if user_input_1 == 'y':
+        valid_choice = False
+        while valid_choice == False:
+            user_input_2 = input('Do you want to record a new entry or update an existing one? (new / update) ').lower()
+            if user_input_2 == 'new':
+                valid_choice = True
+                new_entry()
+            # make 'elif' its own function
+            elif user_input_2 == 'update' and (len(missing_persons) > 1):
+                valid_choice = True                
+            elif user_input_2 == 'update' and (len(missing_persons) == 1):
+                print('There are no entries in the list yet. Please try again.')
+            else:
+                print('That is not a valid choice. Please try again.')
+    else:
+        print('OK, closing the program...')
+
+
+system_continue = input('Do you want to keep running the program? (y/n) ').lower()
+while system_continue == 'y':
+    new_entry()
+    print('\nThis is the current overview of missing persons in Beirut since the explosion of Tuesday August 4 2020:\n\n')
+    print('*** REPORT OF MISSING PEOPLE IN BEIRUT SINCE EXPLOSION ON TUESDAY AUGUST 4 2020 ***\n\n')
+    for k, v in missing_persons_dict.items():
+        print (v[first_name], v[last_name])
+    system_continue = input('Do you want to keep running the program? (y/n) ').lower()
+   
+
+'''
+Another option: report_missing(Last Name, First Name, DoB, Phone #, Status)
+'''
+
+'''
+
+# TO SEARCH BY LAST NAME AND DOB
+                    user_query = input('Please provide the last name and DoB (DD/MM/YYYY) of the entry you want to update, separated by a comma: ')
+                    user_query_list = [x.strip() for x in user_query.split(',')]
+                    user_query_list[0] = str(user_query_list[0]).capitalize()
+'''
